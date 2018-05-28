@@ -1,0 +1,27 @@
+- port_limit    : 4         
+  version       : 2
+  interfaces    : ["03:00.0","dummy","dummy","03:00.1"]   # list of the interfaces to bind run ./dpdk_nic_bind.py --status 
+  c : 1
+  platform :
+        master_thread_id  : 0
+        latency_thread_id : 5
+        dual_if   :
+             - socket   : 0
+               threads  : [1,2]
+             - socket   : 0
+               threads  : [6,7]
+
+  port_info:
+                 - dest_mac        :   [0x00,0x00,0x00,0x01,0x00,0x00]
+                   src_mac         :   [0x00,0x00,0x00,0x01,0x00,0x00]
+
+                 - dest_mac        :   [0x00,0x00,0x00,0x01,0x00,0x00]
+                   src_mac         :   [0x00,0x00,0x00,0x01,0x00,0x00]
+
+                 - dest_mac        :   [0x00,0x00,0x00,0x01,0x00,0x00]
+                   src_mac         :   [0x00,0x00,0x00,0x01,0x00,0x00]
+
+                 - dest_mac        :   [0x00,0x00,0x00,0x01,0x00,0x00]
+                   src_mac         :   [0x00,0x00,0x00,0x01,0x00,0x00]
+
+

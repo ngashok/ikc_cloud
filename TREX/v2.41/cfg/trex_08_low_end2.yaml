@@ -1,0 +1,11 @@
+- port_limit: 2
+  version: 2
+  interfaces: ['p1p1', 'p5p2']
+  low_end: true
+  port_info:
+      - ip: 1.1.1.1
+        default_gw: 2.2.2.2
+      - ip: 2.2.2.2
+        default_gw: 1.1.1.1
+
+

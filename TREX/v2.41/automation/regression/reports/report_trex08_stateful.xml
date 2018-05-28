@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?><testsuite name="nosetests" tests="1" errors="1" failures="0" skip="0"><testcase classname="stateful_tests.trex_tcp_test.CTRexTcp_Test" name="test_ipv6_tcp_http" time="306.168"><error type="exceptions.Exception" message="Test failed. Reasons:&#10;Errors in tcp counters check "><![CDATA[Traceback (most recent call last):
+  File "/auto/sw/packages/python/2.7.11/lib/python2.7/unittest/case.py", line 358, in run
+    self.tearDown()
+  File "/auto/srg-sce-swinfra-usr/emb/users/hhaim/work/depot/asr1k/emb/private/hhaim/bp_sim_git/trex-core/scripts/automation/regression/stateful_tests/trex_tcp_test.py", line 304, in tearDown
+    CTRexGeneral_Test.tearDown(self)
+  File "/auto/srg-sce-swinfra-usr/emb/users/hhaim/work/depot/asr1k/emb/private/hhaim/bp_sim_git/trex-core/scripts/automation/regression/stateful_tests/trex_general_test.py", line 509, in tearDown
+    raise Exception('Test failed. Reasons:\n%s' % '\n'.join(self.fail_reasons))
+Exception: Test failed. Reasons:
+Errors in tcp counters check 
+]]></error><system-out><![CDATA[
+LATEST RESULT OBJECT:
+Is valid history?       True
+Done warmup?            True
+Expected tx rate:       {u'm_tx_expected_pps': 0.0, u'm_tx_expected_bps': 0.0, u'm_tx_expected_cps': 0.0}
+Current tx rate:        {u'm_tx_bps': 4701076992.0, u'm_tx_cps': 16132.6, u'm_tx_pps': 506106.2}
+Minimum latency:        {u'min-2': 10, u'min-3': 10, u'min-0': 10, u'min-1': 10}
+Maximum latency:        {u'max-0': 15, u'max-1': 15, u'max-2': 5, u'max-3': 5}
+Average latency:        {'all': 5.625, u'port2': 6.0, u'port3': 5.5, u'port0': 5.5, u'port1': 5.5}
+Average window latency: {'all': 5.025, u'port2': 5.04, u'port3': 5.02, u'port0': 5.02, u'port1': 5.02}
+Total drops:            0
+Drop rate:              0.0
+History size so far:    100
+
+
+LATEST DUMP:
+TRex CPU utilization: 36.88%, norm_cpu is : 34.7 Gb/core
+Err percent: 73.4795553827
+{u'client': {u'all': {u'__last': 0,
+                      u'err_rx_throttled': 18448,
+                      u'm_active_flows': 0,
+                      u'm_avg_size': 1039.642993,
+                      u'm_est_flows': 0,
+                      u'm_rx_bw_l7_r': 4302819730.980185,
+                      u'm_rx_pps_r': 436836.6875,
+                      u'm_tx_bw_l7_r': 32150677.319883,
+                      u'm_tx_bw_l7_total_r': 32146758.217566,
+                      u'm_tx_pps_r': 84372.328125,
+                      u'm_tx_ratio': 100.012191,
+                      u'tcps_closed': 6656848,
+                      u'tcps_connattempt': 6656848,
+                      u'tcps_connects': 6656848,
+                      u'tcps_delack': 6656848,
+                      u'tcps_preddat': 146450656,
+                      u'tcps_rcvackbyte': 1657555152,
+                      u'tcps_rcvackbyte_of': 6656848,
+                      u'tcps_rcvackpack': 13313696,
+                      u'tcps_rcvbyte': 213644879712,
+                      u'tcps_rcvpack': 159764352,
+                      u'tcps_rttupdated': 19970544,
+                      u'tcps_segstimed': 19970544,
+                      u'tcps_sndacks': 19970544,
+                      u'tcps_sndbyte': 1657555152,
+                      u'tcps_sndbyte_ok': 1657555152,
+                      u'tcps_sndctrl': 6656848,
+                      u'tcps_sndpack': 6656848,
+                      u'tcps_sndtotal': 33284240}},
+ u'server': {u'all': {u'__last': 0,
+                      u'err_rx_throttled': 4358,
+                      u'm_active_flows': 0,
+                      u'm_avg_size': 1077.192985,
+                      u'm_est_flows': 0,
+                      u'm_rx_bw_l7_r': 32149410.966314,
+                      u'm_rx_pps_r': 101755.015625,
+                      u'm_tx_bw_l7_r': 4459382996.751019,
+                      u'm_tx_bw_l7_total_r': 4302701116.813837,
+                      u'm_tx_pps_r': 419452.9375,
+                      u'm_tx_ratio': 103.641477,
+                      u'tcps_accepts': 6656848,
+                      u'tcps_closed': 6656848,
+                      u'tcps_connects': 6656848,
+                      u'tcps_rcvackbyte': 213644879712,
+                      u'tcps_rcvackbyte_of': 13313696,
+                      u'tcps_rcvackpack': 26627392,
+                      u'tcps_rcvbyte': 1657555152,
+                      u'tcps_rcvpack': 13313696,
+                      u'tcps_rttupdated': 26627392,
+                      u'tcps_segstimed': 26627392,
+                      u'tcps_sndacks': 13313696,
+                      u'tcps_sndbyte': 213644879712,
+                      u'tcps_sndbyte_ok': 213644879712,
+                      u'tcps_sndpack': 153107504,
+                      u'tcps_sndtotal': 166421200}}}
+
+LATEST RESULT OBJECT:
+Is valid history?       True
+Done warmup?            True
+Expected tx rate:       {u'm_tx_expected_pps': 0.0, u'm_tx_expected_bps': 0.0, u'm_tx_expected_cps': 0.0}
+Current tx rate:        {u'm_tx_bps': 9619959.0, u'm_tx_cps': 4885.2, u'm_tx_pps': 12447.4}
+Minimum latency:        {u'min-2': 10, u'min-3': 10, u'min-0': 10, u'min-1': 10}
+Maximum latency:        {u'max-0': 15, u'max-1': 15, u'max-2': 5, u'max-3': 5}
+Average latency:        {'all': 6.925, u'port2': 7.0, u'port3': 7.0, u'port0': 6.7, u'port1': 7.0}
+Average window latency: {'all': 6.893, u'port2': 6.997, u'port3': 6.955, u'port0': 6.681, u'port1': 6.94}
+Total drops:            0
+Drop rate:              0.0
+History size so far:    100
+
+
+LATEST DUMP:
+TRex CPU utilization: 0.27%, norm_cpu is : 12.77 Gb/core
+Err percent: 36.1333303519
+{u'client': {u'all': {u'__last': 0,
+                      u'm_active_flows': 0,
+                      u'm_avg_size': 0.0,
+                      u'm_est_flows': 0,
+                      u'm_rx_bw_l7_r': 0.0,
+                      u'm_rx_pps_r': 0.0,
+                      u'm_tx_bw_l7_r': 0.0,
+                      u'm_tx_bw_l7_total_r': 0.0,
+                      u'm_tx_pps_r': 0.0,
+                      u'm_tx_ratio': 0.0,
+                      u'udps_closed': 2398000,
+                      u'udps_connects': 2398000,
+                      u'udps_keepdrops': 50,
+                      u'udps_rcvbyte': 112703650,
+                      u'udps_rcvpkt': 2397950,
+                      u'udps_sndbyte': 74338000,
+                      u'udps_sndpkt': 2398000},
+             u'err': {u'__last': u'', u'udps_keepdrops': u'keepalive drop'}},
+ u'server': {u'all': {u'__last': 0,
+                      u'm_active_flows': 0,
+                      u'm_avg_size': 0.0,
+                      u'm_est_flows': 0,
+                      u'm_rx_bw_l7_r': 0.0,
+                      u'm_rx_pps_r': 0.0,
+                      u'm_tx_bw_l7_r': 0.0,
+                      u'm_tx_bw_l7_total_r': 0.0,
+                      u'm_tx_pps_r': 0.0,
+                      u'm_tx_ratio': 0.0,
+                      u'udps_accepts': 2397950,
+                      u'udps_closed': 2397950,
+                      u'udps_rcvbyte': 74336450,
+                      u'udps_rcvpkt': 2397950,
+                      u'udps_sndbyte': 112703650,
+                      u'udps_sndpkt': 2397950}}}
+Error: Errors in tcp counters check 
+]]></system-out></testcase></testsuite>

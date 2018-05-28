@@ -1,0 +1,233 @@
+#
+# Makefile for cligen CLI generator.
+#
+# ***** BEGIN LICENSE BLOCK *****
+# 
+# Copyright (C) 2001-2018 Olof Hagsand
+#
+# This file is part of CLIgen.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# Alternatively, the contents of this file may be used under the terms of
+# the GNU General Public License Version 2 or later (the "GPL"),
+# in which case the provisions of the GPL are applicable instead
+# of those above. If you wish to allow use of your version of this file only
+# under the terms of the GPL, and not to allow others to
+# use your version of this file under the terms of Apache License version 2, indicate
+# your decision by deleting the provisions above and replace them with the 
+# notice and other provisions required by the GPL. If you do not delete
+# the provisions above, a recipient may use your version of this file under
+# the terms of any one of the Apache License version 2 or the GPL.
+#
+# ***** END LICENSE BLOCK *****
+
+
+prefix		= @prefix@
+datarootdir	= @datarootdir@
+exec_prefix	= @exec_prefix@
+bindir		= @bindir@
+libdir		= @libdir@
+srcdir		= @srcdir@
+ # Force a cligen sub-directory
+includedir	= @includedir@/cligen
+
+CC		= @CC@
+CFLAGS		= -fPIC @CFLAGS@
+LDFLAGS		= @LDFLAGS@
+LIBS		= @LIBS@
+INCLUDES	= -I. -I@srcdir@ @INCLUDES@
+SH_SUFFIX	= @SH_SUFFIX@
+pdflatex	= @PDFLATEX@
+HOST_VENDOR     = @host_vendor@
+
+CLIGEN_VERSION = @CLIGEN_VERSION@
+CLIGEN_MAJOR   = @CLIGEN_VERSION_MAJOR@
+CLIGEN_MINOR   = @CLIGEN_VERSION_MINOR@
+
+# Linker-name: libcligen.so
+# so-name: libcligen.so.3
+# real-name: libcligen.so.3.0
+MYLIB        = libcligen$(SH_SUFFIX).$(CLIGEN_MAJOR).$(CLIGEN_MINOR)
+MYLIBSO      = libcligen$(SH_SUFFIX).$(CLIGEN_MAJOR)
+MYLIBLINK    = libcligen$(SH_SUFFIX)
+
+SRC		= cligen_gen.c cligen_handle.c cligen_var.c cligen_match.c \
+		  cligen_read.c cligen_io.c cligen_expand.c cligen_syntax.c \
+		  cligen_print.c cligen_cvec.c cligen_buf.c cligen_util.c \
+		  getline.c build.c
+
+INCS		= cligen_var.h cligen_cvec.h cligen_gen.h cligen_handle.h \
+		  cligen_print.h cligen_read.h cligen_io.h cligen_expand.h \
+		  cligen_syntax.h cligen_buf.h cligen_util.h cligen.h
+
+OBJS		= $(SRC:.c=@OBJ_SUFFIX@) 
+APPS		= cligen_hello cligen_file cligen_tutorial
+
+YACC		= @YACC@
+LEX		= @LEX@
+
+all:	cligen $(MYLIB) $(MYLIBLINK) $(APPS)
+
+.PHONY: TAGS
+TAGS:
+	find . -name '*.[chyl]' -print | etags -
+
+distclean: clean
+	rm -f Makefile config.log config.status config.h TAGS .depend
+	rm -rf autom4te.cache build.c cligen_config.h
+	rm -rf doc build-root/rpmbuild
+	rm -f build-root/*.tar.xz build-root/*.rpm extras/rpm/Makefile
+
+export BR=$(CURDIR)/build-root
+
+$(BR)/scripts/.version:
+ifneq ("$(wildcard /etc/redhat-release)","")
+	$(shell $(BR)/scripts/version rpm-string > $(BR)/scripts/.version)
+else
+	$(shell $(BR)/scripts/version > $(BR)/scripts/.version)
+endif
+
+DIST_FILE = $(BR)/cligen-$(shell extras/scripts/version).tar
+DIST_SUBDIR = cligen-$(shell extras/scripts/version | cut -f1 -d-)
+
+dist:
+	@if git rev-parse 2> /dev/null ; then \
+	    git archive \
+	      --prefix=$(DIST_SUBDIR)/ \
+	      --format=tar \
+	      -o $(DIST_FILE) \
+	    HEAD ; \
+	    git describe > $(BR)/.version ; \
+	else \
+	    (cd .. ; tar -cf $(DIST_FILE) $(DIST_SUBDIR) --exclude=*.tar) ; \
+	    extras/scripts/version > $(BR)/.version ; \
+	fi
+	@tar --append \
+	  --file $(DIST_FILE) \
+	  --transform='s,.*/.version,$(DIST_SUBDIR)/extras/scripts/.version,' \
+	  $(BR)/.version
+	@$(RM) $(BR)/.version $(DIST_FILE).xz
+	@xz -v --threads=0 $(DIST_FILE)
+	@$(RM) $(BR)/cligen-latest.tar.xz
+	@ln -rs $(DIST_FILE).xz $(BR)/cligen-latest.tar.xz
+
+pkg-rpm: dist
+	make -C extras/rpm
+
+pkg-srpm: dist
+	make -C extras/rpm srpm
+
+# Default rule  .c.o:	
+%@OBJ_SUFFIX@ : @srcdir@/%.c
+	$(CC) $(INCLUDES) $(CFLAGS) -c $<
+# For linux?
+.c.o:
+	$(CC) $(INCLUDES) $(CFLAGS) -c $<
+
+.PHONY: build.c 
+build.c:	
+	echo "/* This file is generated from the CLIgen Makefile */" > build.c;
+	date +"const char CLIGEN_BUILDSTR[64]=\"%Y.%m.%d %H:%M by `whoami` on `hostname`"\"\; >> build.c;
+	echo "const char CLIGEN_VERSION[64]=\"$(CLIGEN_VERSION)\""\; >> build.c;
+
+# install-bin install-include
+install: install-lib install-include
+
+install-bin: $(APPS)
+	install -m 0755 -d $(DESTDIR)$(bindir)
+	install -m 0755 -s $(APPS) $(DESTDIR)$(bindir)
+
+install-lib: $(MYLIB)
+	install -m 0755 -d $(DESTDIR)$(libdir)
+	install -m 0644 -s $(MYLIB) $(DESTDIR)$(libdir)
+	ln -sf $(MYLIB) $(DESTDIR)$(libdir)/$(MYLIBSO)     # -l:libcligen.so.3
+	ln -sf $(MYLIBSO) $(DESTDIR)$(libdir)/$(MYLIBLINK) # -l:libcligen.so
+
+
+# Installs include files in subdir called 'cligen'. Applications should include
+# <cligen/cligen.h>
+install-include: $(INCS)
+	install -m 0755 -d $(DESTDIR)$(includedir)
+	install -m 0644 $(INCS) $(DESTDIR)$(includedir)
+
+uninstall: 
+	rm -f $(DESTDIR)$(libdir)/$(MYLIB)
+	for i in $(INCS); do \
+		rm -f $(DESTDIR)$(includedir)/$$i; \
+	done
+
+# CLIGEN parser src
+YACC_SRC        = cligen_parse.y
+LEX_SRC         = cligen_parsel
+YACCOBJS := lex.cligen_parse.o cligen_parse.tab.o 
+
+clean:  
+	rm -f $(APPS) $(OBJS) $(YACCOBJS) 
+	rm -f $(MYLIB) $(MYLIBSO) $(MYLIBLINK) 
+	rm -f *.tab.c *.tab.h *.tab.o 
+	rm -f lex.*.c lex.*.o cligen
+
+%.c : %.y  # cancel implicit yacc rule
+%.c : %.l  # cancel implicit lex rule
+
+# top file parse
+lex.cligen_parse.c : cligen_parse.l cligen_parse.tab.h
+	$(LEX) -Pcligen_parse cligen_parse.l # -d is debug 
+
+cligen_parse.tab.c cligen_parse.tab.h: cligen_parse.y
+	$(YACC) -l -d -p cligen_parse cligen_parse.y # -t is debug
+	mv y.tab.c cligen_parse.tab.c
+	mv y.tab.h cligen_parse.tab.h
+
+lex.cligen_parse.o : lex.cligen_parse.c cligen_parse.tab.h
+	$(CC) $(INCLUDES) -DYY_NO_INPUT $(CFLAGS) -c $<
+
+# Applications
+cligen_hello : cligen_hello.c cligen $(MYLIB) 
+	$(CC) $(CFLAGS) $(INCLUDES) $< $(LDFLAGS) $(LIBS) -o $@ $(MYLIB)
+
+cligen_file :	cligen_file.c cligen $(MYLIB) 
+	$(CC) $(CFLAGS) $(INCLUDES) $< $(LDFLAGS) $(LIBS) -o $@ $(MYLIB)
+
+cligen_tutorial :cligen_tutorial.c cligen $(MYLIB) 
+	$(CC) $(CFLAGS) $(INCLUDES) $< $(LDFLAGS) $(LIBS) -o $@ $(MYLIB)
+
+$(MYLIB) : $(OBJS) $(YACCOBJS)
+ifeq ($(HOST_VENDOR),apple)
+	$(CC) -shared -o $@ $(OBJS) $(YACCOBJS) -undefined dynamic_lookup -o $(MYLIB) $(LIBS)
+else
+	$(CC) -shared -o $@ $(OBJS) $(YACCOBJS) -Wl,-soname=$(MYLIB) $(LIBS)
+endif
+
+# link-name is needed for application linking
+$(MYLIBSO) : $(MYLIB)
+
+$(MYLIBLINK) : $(MYLIB)
+#	ln -sf $(MYLIB) $@
+
+# recursive link to handle application include files, if you have not installed
+# .h files in $(includefile)
+cligen : 
+	ln -sf . $@
+
+
+.PHONY: doc
+doc : 
+	doxygen Doxyfile
+
+.PHONY: depend
+depend:
+	$(CC) $(DEPENDFLAGS) @DEFS@ $(INCLUDES) $(CFLAGS) -MM $(SRC) cligen_file.c cligen_hello.c cligen_tutorial.c > .depend
+
+#include .depend

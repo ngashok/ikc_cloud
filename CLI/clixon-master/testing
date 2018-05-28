@@ -1,0 +1,9 @@
+<config>
+   <interfaces>
+      <interface>
+         <name>abc</name>
+         <type>ipv4</type>
+         <enabled>true</enabled>
+      </interface>
+   </interfaces>
+</config>

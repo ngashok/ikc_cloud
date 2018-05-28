@@ -1,0 +1,10 @@
+Version : v2.37
+DPDK version: DPDK 17.11.0
+User    : hhaim
+Date    : Mar 13 2018 , 13:34:10
+Uuid    : 55f9ecec-26b2-11e8-931d-641225363740
+Git SHA : a8f7d8089e004892c00dbe25563f235149a0d9f2
+Compiled with GCC: 4.7.2 20121109 (Red Hat 4.7.2-8)
+Compiled with glibc: 2.16 (host: 2.16)
+Sanitized image: no
+Server: 10.56.216.127, Modes: ['loopback']
