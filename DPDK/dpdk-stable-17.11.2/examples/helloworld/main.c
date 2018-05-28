@@ -46,27 +46,27 @@
 
 void dummy_function1()
 {
-	for(int i=0; i< 1000; i++);
+    for(int i=0; i< 1000; i++);
 }
 
 void  dummy_function2()
 {
-	for(int i=0; i< 2000; i++);
+    for(int i=0; i< 2000; i++);
 }
 
 static int
 lcore_hello(__attribute__((unused)) void *arg)
 {
-	unsigned lcore_id;
-	lcore_id = rte_lcore_id();
-	printf("Ashok hello from core %u\n", lcore_id);
+    unsigned lcore_id;
+    lcore_id = rte_lcore_id();
+    printf("Ashok hello from core %u\n", lcore_id);
 
-	for (int i = 0; i< 1000000; i++) 
-	{
-		dummy_function1();
-		dummy_function2();
-	}
-	return 0;
+    for (int i = 0; i< 1000000; i++) 
+    {
+        dummy_function1();
+        dummy_function2();
+    }
+    return 0;
 }
 
 int
