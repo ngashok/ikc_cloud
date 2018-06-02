@@ -1,3 +1,0 @@
-#Dependencies installed
-sudo apt-get install flex
-sudo apt-get install bison

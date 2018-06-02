@@ -1,1 +1,0 @@
-/home/ngashok/DPDK/dpdk-stable-17.11.2/lib/librte_eal/linuxapp/kni/kni_misc.c
